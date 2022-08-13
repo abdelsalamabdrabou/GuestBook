@@ -1,4 +1,6 @@
 using GuestBook.Data;
+using GuestBook.DataAccess.Repository;
+using GuestBook.DataAccess.Repository.IRepository;
 using GuestBook.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IRepository<Message>, MessageRepository>();
 
 var app = builder.Build();
 

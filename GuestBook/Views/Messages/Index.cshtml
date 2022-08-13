@@ -1,56 +1,69 @@
-﻿<h2>Messages</h2>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager;
+@model MessageVM
+@{
+    
+}
+
+<h2>Messages</h2>
 
 <div class="row">
     <div class="col-12 mb-3">
-        <form>
+        <form method="post">
             <div class="mb-3">
                 <label class="form-label">Topic</label>
-                <input type="email" class="form-control">
+                <input asp-for="Message.Topic" type="Topic" class="form-control">
+                <span asp-validation-for="Message.Topic" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Text</label>
-                <textarea class="form-control" rows="6"></textarea>
+                <textarea asp-for="Message.Text" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Message.Text" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            @if (Model.Message.MessageId == 0)
+            {
+                <button asp-action="Index" type="submit" class="btn btn-primary">Submit</button>
+            }
+            else
+            {
+                <input asp-for="Message.MessageId" type="hidden">
+                <input asp-for="Message.UserId" type="hidden">
+                <button asp-action="Edit" asp-route-id="@Model.Message.MessageId" type="submit" class="btn btn-success">Edit</button>
+            }
         </form>
     </div>
     <hr />
 
     <div class="col-12">
-        <div class="card mb-2" style="width: 500px;">
-            <div class="card-body">
-                <h5 class="card-title">My topic is blahblahblah3</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Ahmed Mohamed</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        @foreach (var message in Model.Messages)
+        {            
+            <div class="card mb-2" style="width: 500px;">
+                <div class="card-body">
+                    <h5 class="card-title">@message.Topic</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@UserManager.FindByIdAsync(message.UserId).Result.FirstName @UserManager.FindByIdAsync(message.UserId).Result.LastName</h6>
+                    <p class="card-text">@message.Text</p>
 
-                <button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#collapseMessage-1">Reply</button>
-                <button class="btn btn-success btn-sm">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
+                    <button class="btn btn-default btn-sm" data-toggle="collapse" data-target="#collapseMessage-1">Reply</button>
+                    <a asp-action="Index" asp-route-id="@message.MessageId" class="btn btn-success btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@message.MessageId" class="btn btn-danger btn-sm">Delete</a>
                 
-                <div class="collapse" id="collapseMessage-1">
-                    <form>                        
-                        <div class="mb-3 mt-1">
-                            <label class="form-label">Text</label>
-                            <textarea class="form-control" rows="3"></textarea>
-                        </div>
+                    <div class="collapse" id="collapseMessage-1">
+                        <form method="post">                        
+                            <div class="mb-3 mt-1">
+                                <label class="form-label">Text</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
                 </div>
-
-                @*<div class="card-body">
-                    <h5 class="card-title">card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">card subtitle</h6>
-                    <p class="card-text">some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="card-link">card link</a>
-                    <a href="#" class="card-link">another link</a>
-                </div>*@
             </div>
-        </div>
+        }
 
-         <div class="card" style="width: 500px;">
+         @*<div class="card" style="width: 500px;">
             <div class="card-body">
                 <h5 class="card-title">My topic is blahblahblah</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Eslam Mohamed</h6>
@@ -83,6 +96,11 @@
                     <button class="btn btn-danger btn-sm">Delete</button>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -10,7 +10,7 @@ namespace GuestBook.Models
     public class Message
     {
         public int MessageId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public string Topic { get; set; }
         public string Text { get; set; }
