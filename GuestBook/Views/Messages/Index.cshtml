@@ -12,6 +12,7 @@
 <div class="row">
     <div class="col-12 mb-3">
         <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="mb-3">
                 <label class="form-label">Topic</label>
                 <input asp-for="Message.Topic" type="Topic" class="form-control">
@@ -58,7 +59,6 @@
                     <!-- Reply form -->
                     <div class="collapse" id="collapseMessage-@message.MessageId">
                         <form method="post">
-                            <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="mb-3 mt-1">
                                 <label class="form-label">Text</label>
                                 <textarea asp-for="MessageReply.Text" class="form-control" rows="3"></textarea>

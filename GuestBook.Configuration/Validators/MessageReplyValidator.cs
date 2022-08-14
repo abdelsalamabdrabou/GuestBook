@@ -12,7 +12,7 @@ namespace GuestBook.Configuration.Validators
     {
         public MessageReplyValidator()
         {
-            RuleFor(m => m.Text).NotEmpty().Length(7, 50);            
+            RuleFor(m => m.Text).NotEmpty().Length(1, 50);            
         }
     }
 }

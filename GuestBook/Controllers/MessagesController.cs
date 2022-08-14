@@ -62,7 +62,15 @@ namespace GuestBook.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
+            var relatedReplies = _unit.MessageReply.GetAllById(id);
+            if (relatedReplies != null)
+            {
+                foreach (var relatedReply in relatedReplies)
+                    _unit.MessageReply.Delete(relatedReply.MessageReplyId);
+            }
+
             _unit.Message.Delete(id);
+
             return RedirectToAction(nameof(Index));
         }
 

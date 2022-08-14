@@ -13,7 +13,7 @@ namespace GuestBook.Configuration.Validators
         public MessageValidator()
         {
             RuleFor(m => m.Topic).NotEmpty().Length(10, 50);
-            RuleFor(m => m.Text).NotEmpty().Length(1000);            
+            RuleFor(m => m.Text).NotEmpty().Length(5, 1000);            
         }
     }
 }
