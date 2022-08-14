@@ -10,5 +10,6 @@ namespace GuestBook.Configuration
     public static class SQLCommands
     {
         public static Message Message { get; } = new Message();
+        public static MessageReply MessageReply { get; } = new MessageReply();
     }
 }

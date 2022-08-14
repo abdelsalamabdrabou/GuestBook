@@ -14,21 +14,23 @@ namespace GuestBook.Controllers
          * Fluent Validation
          * Reply Messages
          */
-        private readonly IRepository<Message> _repo;
-        public MessagesController(IRepository<Message> repo)
+        private readonly IUnitOfWork _unit;
+        public MessagesController(IUnitOfWork unit)
         {
-            _repo = repo;
+            _unit = unit;
         }
         public IActionResult Index(int id)
         {
             var messageVM = new MessageVM()
             {
                 Message = new(),
-                Messages = _repo.GetAll()
+                Messages = _unit.Message.GetAll(),
+                MessageReply = new(),
+                MessageReplies = _unit.MessageReply.GetAll()
             };
 
             if (id != 0)
-                messageVM.Message = _repo.Find(id);
+                messageVM.Message = _unit.Message.Find(id);
 
             return View(messageVM);
         }
@@ -40,7 +42,7 @@ namespace GuestBook.Controllers
             if (ModelState.IsValid)
             {
                 message.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _repo.Add(message);
+                _unit.Message.Add(message);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -53,7 +55,7 @@ namespace GuestBook.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repo.Update(message);
+                _unit.Message.Update(message);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -63,7 +65,7 @@ namespace GuestBook.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            _repo.Delete(id);
+            _unit.Message.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

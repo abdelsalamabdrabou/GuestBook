@@ -10,11 +10,10 @@ namespace GuestBook.Models
     public class MessageReply
     {
         public int MessageReplyId { get; set; }
-        public int MessageId { get; set; }
+        public int? MessageId { get; set; }
         [ForeignKey("MessageId")]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser ApplicationUser { get; set; }
         public string Text { get; set; }
     }
 }

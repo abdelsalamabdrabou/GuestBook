@@ -46,5 +46,10 @@ namespace GuestBook.DataAccess.Repository
         {
             _db.Execute(SQLCommands.Message.Update, entity);
         }
+
+        public IEnumerable<Message> GetAllById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
