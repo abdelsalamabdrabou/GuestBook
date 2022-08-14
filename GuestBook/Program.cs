@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using GuestBook.Configuration.Validators;
 using GuestBook.Data;
 using GuestBook.DataAccess.Repository;
 using GuestBook.DataAccess.Repository.IRepository;
@@ -18,6 +21,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddFluentValidationAutoValidation(config =>
+{
+    config.DisableDataAnnotationsValidation = true;
+});
+builder.Services.AddScoped<IValidator<Message>, MessageValidator>();
+builder.Services.AddScoped<IValidator<MessageReply>, MessageReplyValidator>();
 
 var app = builder.Build();
 

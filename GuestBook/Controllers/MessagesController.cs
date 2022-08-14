@@ -15,20 +15,15 @@ namespace GuestBook.Controllers
          * Reply Messages
          */
         private readonly IUnitOfWork _unit;
+        private readonly MessageVM messageVM;
         public MessagesController(IUnitOfWork unit)
         {
+            var Init = new Init(unit);
             _unit = unit;
+            messageVM = Init.InitMessageVM();
         }
         public IActionResult Index(int id)
         {
-            var messageVM = new MessageVM()
-            {
-                Message = new(),
-                Messages = _unit.Message.GetAll(),
-                MessageReply = new(),
-                MessageReplies = _unit.MessageReply.GetAll()
-            };
-
             if (id != 0)
                 messageVM.Message = _unit.Message.Find(id);
 
@@ -46,9 +41,9 @@ namespace GuestBook.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View();
+            return View(messageVM);
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Message message)
@@ -59,7 +54,9 @@ namespace GuestBook.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View();
+            messageVM.Message = message;
+
+            return View(nameof(Index), messageVM);
         }
 
         [HttpGet]
@@ -68,5 +65,6 @@ namespace GuestBook.Controllers
             _unit.Message.Delete(id);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

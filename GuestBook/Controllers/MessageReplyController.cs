@@ -8,12 +8,16 @@ namespace GuestBook.Controllers
     public class MessageReplyController : Controller
     {
         private readonly IUnitOfWork _unit;
+        private readonly MessageVM messageVM;
         public MessageReplyController(IUnitOfWork unit)
         {
+            var Init = new Init(unit);
             _unit = unit;
+            messageVM = Init.InitMessageVM();
         }
 
         [HttpPost]
+        [Route("/Messages/Index")]
         [ValidateAntiForgeryToken]
         public IActionResult Index(MessageReply messageReply)
         {
@@ -24,7 +28,7 @@ namespace GuestBook.Controllers
                 return RedirectToAction(nameof(Index), "Messages");
             }
 
-            return View();
+            return View("../Messages/Index", messageVM);
         }
 
         [HttpGet]
